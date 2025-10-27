@@ -1,0 +1,80 @@
+DATABASE FIRTS 
+
+Scaffold-DbContext "Server=DESKTOP-8S23DTV;Database=EmpresaElectronicos;Integrated Security=True;TrustServerCertificate=True" 
+Microsoft.EntityFrameworkCore.SqlServer 
+-OutputDir Models 
+-Context AppDbContext 
+-Schemas Configuracion,Administracion,Clasificacion 
+-UseDatabaseNames
+
+--CODIGO PARA GENERAR--
+Scaffold-DbContext 
+
+--CADENA DE CONEXION--
+"Server=DESKTOP-8S23DTV;Database=EmpresaElectronicos;Integrated Security=True;TrustServerCertificate=True" 
+
+--Indica el proveedor de base de datos--
+Microsoft.EntityFrameworkCore.SqlServer 
+
+--Carpeta donde se guardarán las clases generadas--
+-OutputDir Models 
+
+--Nombre que quieres darle a la clase del contexto--
+-Context AppDbContext 
+
+--Le dices que solo incluya esos esquemas--
+-Schemas Configuracion,Administracion,Clasificacion 
+
+--Hace que EF use los nombres exactos de tus tablas/columnas tal como están en SQL--
+-UseDatabaseNames
+
+
+-- TRAER SOLO TABLAS
+
+Scaffold-DbContext "Server=DESKTOP-8S23DTV;Database=EmpresaElectronicos;Integrated Security=True;TrustServerCertificate=True" `
+  Microsoft.EntityFrameworkCore.SqlServer `
+  -OutputDir Models `
+  -Context AppDbContext `
+  -UseDatabaseNames `
+  -Tables Configuracion.Empresa, Administracion.Ubicacion, Administracion.Equipo, Clasificacion.Categoria
+
+--TRAER POR SCHEMAS
+
+Scaffold-DbContext "Server=DESKTOP-8S23DTV;Database=EmpresaElectronicos;Integrated Security=True;TrustServerCertificate=True" `
+  Microsoft.EntityFrameworkCore.SqlServer `
+  -OutputDir Models `
+  -Context AppDbContext `
+  -UseDatabaseNames `
+  -Schemas Configuracion, Administracion   # ← trae todo lo de esos schemas
+
+
+
+
+
+
+CODE FIRST
+
+--
+primero se tiene que realizer la clase DbContext
+
+y las clases
+
+
+public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DbSet<Autor> Autores { get; set; }
+        public DbSet<Libro> Libros { get; set; }
+        public DbSet<Comentario> Comentario { get; set; }
+        public DbSet<AutorLibro> AutorLibros { get; set; }
+
+    }
+
+--agrega como un tipo commit
+Add-Migration "commit"
+
+--actualiza la bd
+Update-Database
