@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ElectronicosProyecto.DTOs.Empresa
+namespace ElectronicosProyecto.DTOs.Ubicacion
 {
-    public class EmpresaUpdateDto
+    public class UbicacionCreateDto
     {
         [Required]
         [MaxLength(120)]
         public string Nombre { get; set; } = string.Empty;
-        public bool Status { get; set; } = true;
+        [Required]
+        public int FkEmpresaId { get; set; }
     }
 }
