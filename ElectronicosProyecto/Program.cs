@@ -19,7 +19,8 @@ namespace ElectronicosProyecto
                     op.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                     // opcional:
                     // op.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-                });
+                })
+                .AddNewtonsoftJson();
 
             // EF Core Coneccion a BD
             builder.Services.AddDbContext<AppDbContext>(opt =>

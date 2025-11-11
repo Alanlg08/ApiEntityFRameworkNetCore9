@@ -3,6 +3,9 @@ using ElectronicosProyecto.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using ElectronicosProyecto.DTOs.Empresa;
+using Azure;
+using ElectronicosProyecto.DTOs.Estado;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace ElectronicosProyecto.Controllers
 {
@@ -113,6 +116,39 @@ namespace ElectronicosProyecto.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [HttpPatch("EdicionParcialEmpresa/{id:int}")]
+        public async Task<ActionResult> Patch(int id, JsonPatchDocument<EmpresaDtoPatch> empresaDtoPatch)
+        {
+            if (empresaDtoPatch is null)
+            {
+                return BadRequest(); 
+            }
+
+            var empresaDB = await context.Empresas.FirstOrDefaultAsync(x => x.id == id);
+
+            if (empresaDB is null)
+            {
+                return BadRequest();
+            }
+
+            var dto = new EmpresaDtoPatch
+            {
+                Nombre = empresaDB.nombre,
+                Status = empresaDB.sis_status
+            };
+
+            empresaDtoPatch.ApplyTo(dto, ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            // Aplica solo si vinieron valores (parcial)
+            if (dto.Nombre is not null) empresaDB.nombre = dto.Nombre;
+            if (dto.Status.HasValue) empresaDB.sis_status = dto.Status.Value;
+
+            await context.SaveChangesAsync();
+            return NoContent();
+
         }
     }
 }
